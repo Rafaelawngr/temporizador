@@ -29,6 +29,8 @@ let inputSeg;
 let tempoRestante;
 let intervalo;
 
+let isRunning = false;
+
 function displayTimer(hh, mm, ss) {
     let resultado = document.querySelector("#tempo");
 
@@ -62,29 +64,44 @@ function addTimer() {
     closeWindow();
 }
 
+
 function startTimer() {
+
+    if (isRunning) {
+        return;
+    }
+
     tempoRestante = inputHoras * 3600 + inputMin * 60 + inputSeg;
 
+
     intervalo = setInterval(function () {
-        tempoRestante--;
         if (tempoRestante <= 0) {
             clearInterval(intervalo);
+            return
         }
-
+        tempoRestante--;
+        
         inputHoras = Math.floor(tempoRestante / 3600);
         inputMin = Math.floor((tempoRestante % 3600) / 60);
         inputSeg = tempoRestante % 60;
-
+        
         displayTimer(inputHoras, inputMin, inputSeg);
     }, 1000);
+
+    isRunning = true;
 }
 
+
+
 function pauseTimer() {
+    
     clearInterval(intervalo);
+    isRunning = false;
 }
 
 function resetTimer() {
 	userInputs()
 	pauseTimer()
     displayTimer(inputHoras, inputMin, inputSeg);
+    isRunning = false;
 }
